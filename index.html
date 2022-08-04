@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>GPAW-install</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<style>
+    /* h1{
+      position: absolute;
+      top: 50px; left:50px;
+    }
+    .split {
+      display: table;
+      width: 100%;
+    }
+    .split-item {
+      display: table-cell;
+      padding: 0px;
+      width: 60%;
+    }
+    .split-left {
+      position: relative;
+    }
+    .split-left__inner {
+      height: 100%;
+      position: fixed;
+      width: 50%;
+    }
+    .split-right {
+      position: relative;
+    }
+    .split-right__inner {
+      height: 420px;
+    } */
+</style>
+<style>
+  .katex {
+    font-size: 90%;
+  }
+</style>
+<style>
+  section{
+    font-size: 130%;
+  }
+</style>
+<h1 id="gpaw%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB-%E6%9C%AA%E5%AE%8C">GPAWのインストール （未完）</h1>
+<h3 id="%E6%9D%B1%E5%A4%A7%E7%89%A9%E6%80%A7%E7%A0%94-system-b-ohtaka%E3%81%ABgpaw%E3%82%92%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%81%99%E3%82%8B%E6%89%8B%E9%A0%86%E3%81%AE%E8%A8%98%E9%8C%B2%E3%81%A7%E3%81%99">東大物性研 System B ohtakaにGPAWをインストールする手順の記録です。</h3>
+<br>
+<h3 id="%E5%8F%82%E8%80%83%E3%83%9A%E3%83%BC%E3%82%B8">参考ページ</h3>
+<h3 id="ase-atomic-simulation-environment-%E5%B0%8E%E5%85%A5%E8%A8%98%E9%8C%B2">- <a href="https://qiita.com/ikutaro_hamada/items/34c69597c7acdb4b4b20">ASE (Atomic Simulation Environment) 導入記録</a></h3>
+<h3 id="install-gpaw-2110-on-issp-system-b-ohtaka">- <a href="http://www-cp.prec.eng.osaka-u.ac.jp/hamamoto/gpaw_21.1.html">Install GPAW 21.1.0 on ISSP System B ohtaka</a></h3>
+<hr>
+<h2 id="ase%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">ASEのインストール</h2>
+<h3 id="%E4%BB%AE%E6%83%B3%E7%92%B0%E5%A2%83%E3%81%AE%E4%BD%9C%E6%88%90">仮想環境の作成</h3>
+<pre class="hljs"><code><div>$ module list
+ 1) intel_compiler/2020.4.304   2) intel_mpi/2020.4.304   3) intel_mkl/2020.4.304
+$ /usr/bin/python3.8 -m venv .venv
+$ source ~/.venv/bin/activate
+(.venv)$ pip install -U pip
+(.venv)$ pip install numpy scipy ase cymem cython decorator mpi4py pytest
+</div></code></pre>
+<hr>
+<h2 id="libxc%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">libxcのインストール</h2>
+<pre class="hljs"><code><div>$ mkdir ~/src; cd $_
+$ wget http://www.tddft.org/programs/libxc/down.php?file=5.2.3/libxc-5.2.3.tar.gz -O libxc-5.2.3.tar.gz
+$ tar xzvf libxc-5.2.3.tar.gz
+$ cd libxc-5.2.3
+$ ./configure CC=icc CFLAG=&quot;-O2 -fPIC&quot; --enable-shared --disable-fortran --prefix=/home/&lt;your-group&gt;/&lt;your-id&gt;/lib/libxc-5.2.3
+$ make
+$ make check
+.
+.
+.
+PASS: xc-run_testsuite
+============================================================================
+Testsuite summary for libxc 5.2.3
+============================================================================
+# TOTAL: 1
+# PASS:  1
+# SKIP:  0
+# XFAIL: 0
+# FAIL:  0
+# XPASS: 0
+# ERROR: 0
+============================================================================
+$ make install
+</div></code></pre>
+<!--
+
+## libvdwxcのインストール
+
+```
+$ cd ~/src
+$ git clone https://gitlab.com/libvdwxc/libvdwxc.git
+$ cd libvdwxc
+$ ./autogen.sh
+$ mkdir build; cd $_
+$ ../configure --prefix="$HOME/lib" CC=icc FC=ifort CFLAGS="-O3" FCFLAGS="-O2" FFTW3_LIBS="-L$MKLROOT -mkl=parallel" FFTW3_INCLUDES="-I$MKLROOT/include/fftw"
+$ make
+$ make install
+```
+-->
+<hr>
+<h2 id="gpaw%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">GPAWのインストール</h2>
+<pre class="hljs"><code><div>(.venv)$ mkdir -p ~/GPAW/src; cd $_
+(.venv)$ wget https://pypi.org/packages/source/g/gpaw/gpaw-22.1.0.tar.gz
+(.venv)$ tar xzvf gpaw-22.1.0.tar.gz
+(.venv)$ cd gpaw-22.1.0
+(.venv)$ vi siteconfig.py
+</div></code></pre>
+<p>siteconfig.py</p>
+<pre class="hljs"><code><div>compiler    = <span class="hljs-string">'/opt/intel/compilers_and_libraries_2020.4.304/linux/bin/intel64/icc'</span>
+mpicompiler = <span class="hljs-string">'/opt/intel/compilers_and_libraries_2020.4.304/linux/mpi/intel64/bin/mpiicc'</span>
+mpilinker   = <span class="hljs-string">'/opt/intel/compilers_and_libraries_2020.4.304/linux/mpi/intel64/bin/mpiicc'</span>
+platform_id = <span class="hljs-string">''</span>
+
+extra_compile_args += [<span class="hljs-string">'-fPIC'</span>, <span class="hljs-string">'-O2'</span>, <span class="hljs-string">'-axCOMMON-AVX512,CORE-AVX512,CORE-AVX2,CORE-AVX-I,AVX,SSE4.2,SSE4.1,SSSE3,SSE3,SSE2'</span>]
+extra_link_args += [<span class="hljs-string">'-mkl=sequential'</span>]
+
+<span class="hljs-comment"># FFTW3:</span>
+fftw = <span class="hljs-literal">True</span>
+<span class="hljs-keyword">if</span> fftw:
+    include_dirs += [<span class="hljs-string">'/opt/intel/compilers_and_libraries_2020.4.304/linux/mkl/include/fftw'</span>]
+
+<span class="hljs-comment"># ScaLAPACK (version 2.0.1+ required):</span>
+scalapack = <span class="hljs-literal">True</span>
+<span class="hljs-keyword">if</span> scalapack:
+    libraries += [<span class="hljs-string">'mkl_def'</span>, <span class="hljs-string">'mkl_scalapack_lp64'</span>, <span class="hljs-string">'mkl_blacs_intelmpi_lp64'</span>]
+
+<span class="hljs-comment"># Use Elpa (requires ScaLAPACK and Elpa API 20171201):</span>
+<span class="hljs-keyword">if</span> <span class="hljs-number">0</span>:
+    elpa = <span class="hljs-literal">True</span>
+    elpadir = <span class="hljs-string">'/usr/local/elpa-2017.05.002-2018.0.128'</span>
+    libraries += [<span class="hljs-string">'elpa'</span>]
+    library_dirs += [<span class="hljs-string">'{}/lib'</span>.format(elpadir)]
+    extra_link_args += [<span class="hljs-string">'-Wl,-rpath={}/lib'</span>.format(elpadir)]
+    include_dirs += [<span class="hljs-string">'{}/include/elpa-2017.05.002'</span>.format(elpadir)]
+<span class="hljs-comment"># LibXC:</span>
+<span class="hljs-comment"># In order to link libxc installed in a non-standard location</span>
+<span class="hljs-comment"># (e.g.: configure --prefix=/home/user/libxc-2.0.1-1), use:</span>
+
+<span class="hljs-comment"># - static linking:</span>
+<span class="hljs-keyword">if</span> <span class="hljs-number">0</span>:
+    xc = <span class="hljs-string">'/home/user/libxc-4.0.4/'</span>
+    include_dirs += [xc + <span class="hljs-string">'include'</span>]
+    extra_link_args += [xc + <span class="hljs-string">'lib/libxc.a'</span>]
+    <span class="hljs-keyword">if</span> <span class="hljs-string">'xc'</span> <span class="hljs-keyword">in</span> libraries:
+        libraries.remove(<span class="hljs-string">'xc'</span>)
+
+<span class="hljs-comment"># - dynamic linking (requires rpath or setting LD_LIBRARY_PATH at runtime):</span>
+<span class="hljs-keyword">if</span> <span class="hljs-number">1</span>:
+    xc = <span class="hljs-string">'/home/k0227/k022706/lib/libxc-5.2.3/'</span>
+    include_dirs += [xc + <span class="hljs-string">'include'</span>]
+    library_dirs += [xc + <span class="hljs-string">'lib'</span>]
+    <span class="hljs-comment"># You can use rpath to avoid changing LD_LIBRARY_PATH:</span>
+    extra_link_args += [<span class="hljs-string">'-Wl,-rpath={xc}lib'</span>.format(xc=xc)]
+    <span class="hljs-keyword">if</span> <span class="hljs-string">'xc'</span> <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> libraries:
+        libraries.append(<span class="hljs-string">'xc'</span>)
+
+
+<span class="hljs-comment"># libvdwxc:</span>
+<span class="hljs-keyword">if</span> <span class="hljs-number">0</span>:
+    libvdwxc = <span class="hljs-literal">True</span>
+    path = <span class="hljs-string">'/home/user/libvdwxc'</span>
+    extra_link_args += [<span class="hljs-string">'-Wl,-rpath=%s/lib'</span> % path]
+    library_dirs += [<span class="hljs-string">'%s/lib'</span> % path]
+    include_dirs += [<span class="hljs-string">'%s/include'</span> % path]
+    libraries += [<span class="hljs-string">'vdwxc'</span>]
+</div></code></pre>
+<pre class="hljs"><code><div>(.venv)$ python setup.py build
+(.venv)$ python setup.py install
+</div></code></pre>
+<hr>
+<h1 id="gpaw%E3%81%AE%E3%83%86%E3%82%B9%E3%83%88">GPAWのテスト</h1>
+<h2 id="gpaw-info%E3%81%AE%E5%AE%9F%E8%A1%8C">gpaw infoの実行</h2>
+<br>
+コマンドラインで`$ gpaw info`を実行しても以下のエラーが出てしまう。
+```
+$ gpaw info
+Abort(1091087) on node 0 (rank 0 in comm 0): Fatal error in PMPI_Init: Other MPI error, error stack:
+MPIR_Init_thread(136):
+MPID_Init(950).......:
+MPIR_pmi_init(168)...: PMI2_Job_GetId returned 14
+```
+<p>ジョブスクリプトを書いてジョブを投入すると、slurm-*.outにライブラリのインストール先を確認することができた。</p>
+<pre class="hljs"><code><div><span class="hljs-meta">#!/bin/sh</span>
+<span class="hljs-comment">#SBATCH -J gpaw_info</span>
+<span class="hljs-comment">#SBATCH -p i8cpu</span>
+<span class="hljs-comment">#SBATCH -N 1</span>
+<span class="hljs-comment">#SBATCH -n 128</span>
+
+module load intel_compiler/2020.4.304 intel_mpi/2020.4.304
+<span class="hljs-built_in">source</span> /home/k0227/k022706/.venv/bin/activate
+srun gpaw info
+</div></code></pre>
+<p>slurm-*.out</p>
+<pre class="hljs"><code><div>| python-3.8.12     /home/k0227/k022706/.venv/bin/python                                                                                            |
+| gpaw-22.1.0       /home/k0227/k022706/.venv/lib64/python3.8/site-packages/gpaw-22.1.0-py3.8-linux-x86_64.egg/gpaw/                                |
+| ase-3.22.1        /home/k0227/k022706/.venv/lib64/python3.8/site-packages/ase/                                                                    |
+| numpy-1.23.1      /home/k0227/k022706/.venv/lib64/python3.8/site-packages/numpy/                                                                  |
+| scipy-1.8.1       /home/k0227/k022706/.venv/lib64/python3.8/site-packages/scipy/                                                                  |
+| libxc-5.2.3       yes                                                                                                                             |
+| _gpaw             /home/k0227/k022706/.venv/lib64/python3.8/site-packages/gpaw-22.1.0-py3.8-linux-x86_64.egg/_gpaw.cpython-38-x86_64-linux-gnu.so |
+| MPI enabled       yes                                                                                                                             |
+| OpenMP enabled    no                                                                                                                              |
+| scalapack         yes                                                                                                                             |
+| Elpa              no                                                                                                                              |
+| FFTW              yes                                                                                                                             |
+| libvdwxc          no                                                                                                                              |
+| PAW-datasets (1)  /home/k0227/k022706/GPAW/paw/gpaw-setups-0.9.20000                                                                              |
+ ---------------------------------------------------------------------------------------------------------------------------------------------------
+</div></code></pre>
+<hr>
+<br>
+<h2 id="pytest%E3%81%AE%E5%AE%9F%E8%A1%8C">pytestの実行</h2>
+<p>pytest.sh</p>
+<pre class="hljs"><code><div><span class="hljs-meta">#!/bin/sh</span>
+<span class="hljs-comment">#SBATCH -J pytest</span>
+<span class="hljs-comment">#SBATCH -p i8cpu</span>
+<span class="hljs-comment">#SBATCH -N 1</span>
+<span class="hljs-comment">#SBATCH -n 128</span>
+
+module load intel_compiler/2020.4.304 intel_mpi/2020.4.304
+srun /home/k0227/k022706/.venv/bin/pytest -v &gt; pytest.log
+</div></code></pre>
+<p>pytest.logの出力</p>
+<pre class="hljs"><code><div>============================= test session starts ==============================
+platform linux -- Python 3.8.12, pytest-7.1.2, pluggy-1.0.0 -- /home/k0227/k022706/
+.venv/bin/python3.8
+cachedir: .pytest_cache
+rootdir: /home/k0227/k022706/GPAW/test
+.
+.
+.
+============================ no tests ran in 0.06s =============================
+collecting ... collected 0 items
+
+============================ no tests ran in 0.06s =============================
+</div></code></pre>
+<hr>
+<h2 id="gpaw-test%E3%81%AE%E5%AE%9F%E8%A1%8C">$ gpaw testの実行</h2>
+<h3 id="paw-datasets%E3%81%AE%E5%85%A5%E6%89%8B">PAW-datasetsの入手</h3>
+<pre class="hljs"><code><div>$ mkdir -p ~/GPAW/paw; cd $_
+$ wget https://wiki.fysik.dtu.dk/gpaw-files/gpaw-setups-0.9.20000.tar.gz
+$ tar zxvf gpaw-setups-0.9.20000.tar.gz
+</div></code></pre>
+<p>.bashrcに<code>export GPAW_SETUP_PATH=~/gpaw-setups-0.9.20000</code>を追加した。</p>
+<br>
+<h2 id="gpaw-test%E3%81%AE%E5%AE%9F%E8%A1%8C">gpaw testの実行</h2>
+<p>gpaw_test.sh</p>
+<pre class="hljs"><code><div><span class="hljs-meta">#!/bin/sh</span>
+<span class="hljs-comment">#SBATCH -J gpaw_test</span>
+<span class="hljs-comment">#SBATCH -p i8cpu</span>
+<span class="hljs-comment">#SBATCH -N 1</span>
+<span class="hljs-comment">#SBATCH -n 128</span>
+
+module load intel_compiler/2020.4.304 intel_mpi/2020.4.304
+<span class="hljs-built_in">source</span> /home/k0227/k022706/.venv/bin/activate
+srun gpaw <span class="hljs-built_in">test</span>
+</div></code></pre>
+<p>テストは水素単原子のエネルギー計算で、結果はtest.txtに出力される</p>
+<p>test.txt</p>
+<pre class="hljs"><code><div>  ___ ___ ___ _ _ _
+ |   |   |_  | | | |
+ | | | | | . | | | |
+ |__ |  _|___|_____|  22.1.0
+ |___|_|
+
+User:   k022706@c15u03n2
+Date:   Thu Aug  4 11:05:15 2022
+Arch:   x86_64
+Pid:    1557448
+Python: 3.8.12
+.
+.
+.
+Kinetic:         -0.546804
+Potential:       -1.736074
+External:        +0.000000
+XC:              -2.418621
+Entropy (-ST):   -0.000000
+Local:           -0.009365
+--------------------------
+Free energy:     -4.710864
+Extrapolated:    -4.710864
+
+Showing only first 2 kpts
+ Kpt  Band  Eigenvalues  Occupancy
+  0     0    -13.13574    2.00000
+
+  1     0     -7.39839    2.00000
+
+
+Fermi level: -2.20476
+
+No gap
+
+Forces in eV/Ang:
+  0 H     0.00000    0.00000    0.00000
+.
+.
+.
+</div></code></pre>
+<p>計算はうまくいったが、slurm-*.outを見るとエラーが出ていた。原因は今の所わからない。</p>
+<pre class="hljs"><code><div> -----------------------------------------------------------------------------------------------------------------------------------------------
+----
+| python-3.8.12     /home/k0227/k022706/.venv/bin/python
+    |
+| gpaw-22.1.0       /home/k0227/k022706/.venv/lib64/python3.8/site-packages/gpaw-22.1.0-py3.8-linux-x86_64.egg/gpaw/
+    |
+| ase-3.22.1        /home/k0227/k022706/.venv/lib64/python3.8/site-packages/ase/
+    |
+| numpy-1.23.1      /home/k0227/k022706/.venv/lib64/python3.8/site-packages/numpy/
+    |
+| scipy-1.8.1       /home/k0227/k022706/.venv/lib64/python3.8/site-packages/scipy/
+    |
+| libxc-5.2.3       yes
+    |
+| _gpaw             /home/k0227/k022706/.venv/lib64/python3.8/site-packages/gpaw-22.1.0-py3.8-linux-x86_64.egg/_gpaw.cpython-38-x86_64-linux-gnu
+.so |
+| MPI enabled       yes
+    |
+| OpenMP enabled    no                                                                                                                              |
+| scalapack         yes                                                                                                                             |
+| Elpa              no                                                                                                                              |
+| FFTW              yes                                                                                                                             |
+| libvdwxc          no                                                                                                                              |
+| PAW-datasets (1)  /home/k0227/k022706/GPAW/paw/gpaw-setups-0.9.20000                                                                              |
+ ---------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+Intel MKL ERROR: Parameter 8 was incorrect on entry to DGEMM .
+Intel MKL ERROR: Parameter 8 was incorrect on entry to DGEMM .
+Intel MKL ERROR: Parameter 8 was incorrect on entry to DGEMM .
+.
+.
+.
+</div></code></pre>
+<hr>
+
+</body>
+</html>
