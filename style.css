@@ -1,0 +1,6 @@
+/*↓画像の中央寄せ*/  
+img[src*="#center"] {  
+    display: block;  
+    margin: auto;  
+  }  
+  /*↑画像の中央寄せ*/
